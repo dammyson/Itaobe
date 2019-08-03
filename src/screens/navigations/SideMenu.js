@@ -5,12 +5,12 @@
 // React native and others libraries imports
 import React, { Component } from 'react';
 import { ScrollView, LayoutAnimation, UIManager, Linking } from 'react-native';
-import { View, List, ListItem, Body, Left, Right, Icon, Item, Input, Button, Grid, Col } from 'native-base';
+import { View, List,Text,ListItem, Body, Left, Right, Icon, Item, Input, Button, Grid, Col } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 
 // Our custom files and classes import
 import SideMenuSecondLevel from './SideMenuSecondLevel';
-import Text from './Text';
+//import Text from './Text';
 
 export default class SideMenu extends Component {
   constructor(props) {
@@ -38,14 +38,14 @@ export default class SideMenu extends Component {
     if(!this.state.subMenu) {
       return(
         <View>
-          <View style={{paddingLeft: 15, paddingRight: 15}}>
+          <View style={{paddingLeft: 15,paddingTop: 25, paddingRight: 15}}>
             <Item error={this.state.searchError}>
                 <Input
                   placeholder='Search...'
                   onChangeText={(text) => this.setState({search: text, searchError: false})}
                   onSubmitEditing={() => this.search()}
                 />
-                <Icon active name='ios-search-outline' onPress={() => this.search()} />
+                <Icon active name='ios-search' onPress={() => this.search()} />
             </Item>
           </View>
           <View style={{paddingRight: 15}}>
@@ -60,7 +60,7 @@ export default class SideMenu extends Component {
                   <Text>Home</Text>
                 </Body>
                 <Right>
-                  <Icon name="ios-arrow-forward" />
+                  <Icon name="arrow-forward" />
                 </Right>
               </ListItem>
               {this.renderMenuItems()}
@@ -108,7 +108,7 @@ export default class SideMenu extends Component {
             <Text>{item.title}</Text>
           </Body>
           <Right>
-            <Icon name="ios-arrow-forward" />
+            <Icon name="arrow-forward" />
           </Right>
         </ListItem>
       );
@@ -154,7 +154,7 @@ export default class SideMenu extends Component {
     if(this.state.search.length <= 2)
       this.setState({searchError: true, search: ""});
     else
-      Actions.search({searchText: this.state.search});
+      Actions.SignIn({searchText: this.state.search});
   }
 
   renderSecondaryList() {

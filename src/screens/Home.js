@@ -1,135 +1,83 @@
-'use strict'
-import React, {Component} from 'react'
-import {
-    Text,
-    Image,
-    View,
-    StyleSheet,
-    TouchableOpacity,
-    ScrollView,
-    Dimensions
-} from 'react-native'
+/**
+* This is the Home page
+**/
 
-import Container from './../resources/components/Container'
-import ListPanel from './../resources/components/ListPanel'
-import SwiperProductThumb from './../resources/components/product/SwiperProductThumb'
-import GridProductThumb from './../resources/components/product/GridProductThumb'
-import Swiper from './../resources/components/Swiper'
-import Grid from './../resources/components/Grid'
+// React native and others libraries imports
+import React, { Component } from 'react';
+import { Image } from 'react-native';
+import { Container, Content, View, Button, Left, Right, Icon, Card, CardItem, cardBody } from 'native-base';
+import { Actions } from 'react-native-router-flux';
 
-import colors from './../resources/styles/colors'
+// Our custom files and classes import
 
-import Icon from 'react-native-vector-icons/FontAwesome'
-import Header from './../resources/components/Header'
 
-import homeData from './../data/home'
+import Navbar from './navigations/Navbar';
+import SideMenuDrawer from './navigations/SideMenuDrawer';
+import CategoryBlock from './navigations/CategoryBlock';
 
-var {height, width} = Dimensions.get('window');
-const initWidth = width;
-const initHeight = initWidth * (500/900)
 
-class Home extends Component {
-    static navigationOptions = {
-        drawerLabel: 'Example Home',
-        drawerIcon: ({ tintColor }) => (
-            <Icon style={styles.icon} name='home' size={20}/>
-        ),
-    };
+export default class Home extends Component {
+  render() {
+    var left = (
+      <Left style={{flex:1}}>
+        <Button onPress={() => this._sideMenuDrawer.open()} transparent>
+          <Icon name='menu' style={{color: "#FFF"}} />
+        </Button>
+      </Left>
+    );
+    var right = (
+      <Right style={{flex:1}}>
+        <Button onPress={() => Actions.search()} transparent>
+          <Icon name='search'  style={{color: "#FFF"}}/>
+        </Button>
+        <Button onPress={() => Actions.cart()} transparent>
+          <Icon name='cart' style={{color: "#FFF"}}/>
+        </Button>
+      </Right>
+    );
+    return(
+      <SideMenuDrawer styles={{marginTop:2}} ref={(ref) => this._sideMenuDrawer = ref}>
+          <Container>
+            <Navbar left={left} right={right} title="MY STORE" />
+            <Content>
+              {this.renderCategories()}
+            </Content>
+          </Container>
+      </SideMenuDrawer>
+    );
+  }
 
-    constructor(props) {
-        super(props)
+  renderCategories() {
+    let cat = [];
+    for(var i=0; i<categories.length; i++) {
+      cat.push(
+        <CategoryBlock key={categories[i].id} id={categories[i].id} image={categories[i].image} title={categories[i].title} />
+      );
     }
+    return cat;
+  }
 
-    render() {
-        return (
-            <Container>
-                <Header navigation={this.props.navigation} title="Example Home Screen"/>
-                <ScrollView>
-                    {this._renderGridList(homeData.grid_fashion)}
-                    {this._renderSwiperList(homeData.fashions)}
-                </ScrollView>
-            </Container>
-        )
-    }
-
-    _renderSwiperList(data) {
-        return (
-            <ListPanel title={data.title} description={data.description}>
-                <Swiper>
-                    {
-                        data.items.map((item, idx) => {
-                            return <SwiperProductThumb key={idx} { ...item }/>
-                        })
-                    }
-                </Swiper>
-            </ListPanel>
-        )
-    }
-
-    _renderGridList(data) {
-        return (
-            <ListPanel title={data.title} description={data.description}>
-                <Grid>
-                    {
-                        data.items.map((item, idx) => {
-                            return <GridProductThumb key={idx} { ...item }/>
-                        })
-                    }
-                </Grid>
-            </ListPanel>
-        )
-    }
 }
 
-const styles = StyleSheet.create({
-    header: {
-        backgroundColor: colors.bg_header
-    },
-    headerSub: {
-        padding: 15,
-        flexDirection: 'row',
-        justifyContent: 'center'
-    },
-    logo: {
-        width: 64,
-        height: 28,
-        resizeMode: 'center'
-    },
-    icoSearch: {
-        color: colors.txt_description,
-        marginRight: 5
-    },
-    btnSearchHolder: {
-        padding: 15,
-        paddingTop: 0
-    },
-    btnSearch: {
-        borderColor: colors.bd_input,
-        justifyContent: 'center',
-        flexDirection: 'row',
-        padding: 8,
-        backgroundColor: colors.bg1,
-        borderWidth: 1,
-        borderRadius: 5
-    },
-    btnSearchTitle: {
-        color: colors.txt_description,
-        fontSize: 16
-    },
-    btnDeals: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        flex: 0.5
-    },
-    icoDeals: {
-        color: colors.txt_description,
-        marginRight: 10
-    },
-    section_title:{
-        fontSize: 18,
-        fontWeight: '600',
-        padding: 20
-    }
-})
-
-module.exports = Home
+var categories = [
+  {
+    id: 1,
+    title: 'MEN',
+    image: 'http://res.cloudinary.com/atf19/image/upload/c_scale,w_489/v1500284127/pexels-photo-497848_yenhuf.jpg'
+  },
+  {
+    id: 2,
+    title: 'WOMEN',
+    image: 'http://res.cloudinary.com/atf19/image/upload/c_scale,w_460/v1500284237/pexels-photo-324030_wakzz4.jpg'
+  },
+  {
+    id: 3,
+    title: 'KIDS',
+    image: 'http://res.cloudinary.com/atf19/image/upload/c_scale,w_445/v1500284286/child-childrens-baby-children-s_shcevh.jpg'
+  },
+  {
+    id: 4,
+    title: 'ACCESORIES',
+    image: 'http://res.cloudinary.com/atf19/image/upload/c_scale,w_467/v1500284346/pexels-photo-293229_qxnjtd.jpg'
+  }
+];

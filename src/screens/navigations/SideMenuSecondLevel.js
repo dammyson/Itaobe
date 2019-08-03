@@ -5,18 +5,18 @@
 // React native and others libraries imports
 import React, { Component } from 'react';
 import { ScrollView } from 'react-native';
-import { View, Button, ListItem, List, Body, Right, Icon } from 'native-base';
+import { View, Text, ListItem, List, Body, Right, Icon } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 
 // Our custom files and classes import
-import Text from './Text';
+//import Text from './Text';
 
 export default class SideMenuSecondLevel extends Component {
   render() {
     return(
       <View>
         <View style={styles.header}>
-          <Icon name='ios-arrow-back' style={{fontSize: 20, marginTop: 4}} onPress={() => this.props.back()} />
+          <Icon name='arrow-back' style={{fontSize: 20, marginTop: 4}} onPress={() => this.props.back()} />
           <View style={{flex: 1, alignItems: 'center'}}>
             <Text style={{textAlign: 'center', fontSize: 20}}>{this.props.title}</Text>
           </View>
@@ -45,7 +45,7 @@ export default class SideMenuSecondLevel extends Component {
             <Text>{item.title}</Text>
           </Body>
           <Right>
-            <Icon name="ios-arrow-forward" />
+            <Icon name="arrow-forward" />
           </Right>
         </ListItem>
       );

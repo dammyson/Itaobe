@@ -17,7 +17,7 @@ export default class Splash extends Component{
   async componentDidMount(){
     const data = await this.performinTimeConsumingTask();
     if(data !== null){
-     this.props.navigation.navigate('SignIn');
+     this.props.navigation.navigate('Home');
     }
   }
 
