@@ -54,7 +54,7 @@ export default class SideMenuSecondLevel extends Component {
   }
 
   itemClicked(item) {
-    Actions.category({id: item.id, title: item.title});
+    Actions.grid({cat: 0, ctg: item.title,});
   }
 
 }
@@ -63,6 +63,7 @@ const styles={
   header: {
     flex: 1,
     flexDirection: 'row',
-    padding: 15
+    padding: 15,
+    marginTop: 20
   }
 };

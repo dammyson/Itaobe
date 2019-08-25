@@ -18,15 +18,11 @@ class GridProductThumb extends Component {
     render() {
         return (
             <TouchableOpacity style={ styles.holder } onPress={ this.props.onPress }>
-                <Image style={ styles.productImage } source={{ uri: this.props.imageUri }} />
+                <Image style={ styles.productImage } source={{ uri: "https://m.ofidy.com/ProductImages/"+this.props.image }} />
                 <Text style={ styles.name } ellipsizeMode='tail' numberOfLines={2}>
                     { this.props.name }
                 </Text>
-                <Text>${ this.props.prize }</Text>
-                <View style={ styles.promotionHolder }>
-                    <Text style={[ styles.name, { textDecorationLine: 'line-through' } ]}>${ this.props.regularPrize }</Text>
-                    <Text style={ styles.name }> | { this.props.discountPercent }% off</Text>
-                </View>
+                <Text>{ this.props.currencyCode} { this.props.price }</Text>
             </TouchableOpacity>
         )
     }

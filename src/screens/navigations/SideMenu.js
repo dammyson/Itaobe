@@ -4,13 +4,13 @@
 
 // React native and others libraries imports
 import React, { Component } from 'react';
-import { ScrollView, LayoutAnimation, UIManager, Linking } from 'react-native';
+import { ScrollView, LayoutAnimation, UIManager,TouchableOpacity, Linking } from 'react-native';
 import { View, List,Text,ListItem, Body, Left, Right, Icon, Item, Input, Button, Grid, Col } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 
 // Our custom files and classes import
 import SideMenuSecondLevel from './SideMenuSecondLevel';
-//import Text from './Text';
+import category from './../../data/category'
 
 export default class SideMenu extends Component {
   constructor(props) {
@@ -95,20 +95,25 @@ export default class SideMenu extends Component {
 
   renderMenuItems() {
     let items = [];
-    menuItems.map((item, i) => {
+    category.map((item, i) => {
       items.push(
         <ListItem
           last={menuItems.length === i+1}
           icon
           key={item.id}
           button={true}
-          onPress={() => this.itemClicked(item)}
         >
           <Body>
+          <TouchableOpacity  onPress={() => this.itemClicked(item)}>
             <Text>{item.title}</Text>
+            </TouchableOpacity>
           </Body>
           <Right>
-            <Icon name="arrow-forward" />
+          <TouchableOpacity  onPress={() => this.itemmoreClicked(item)}>
+            <Icon name="arrow-forward" 
+            
+            />
+            </TouchableOpacity>
           </Right>
         </ListItem>
       );
@@ -117,8 +122,13 @@ export default class SideMenu extends Component {
   }
 
   itemClicked(item) {
+    Actions.grid({ title: item.title, cat: item.id, ctg: 0,});
+      return;
+    
+  }
+
+  itemmoreClicked(item) {
     if(!item.subMenu || item.subMenu.length<=0) {
-      Actions.category({id: item.id, title: item.title});
       return;
     }
     var animationConfig = {
@@ -196,99 +206,9 @@ const styles = {
   }
 };
 
-var menuItems = [
-  {
-    id: 1,
-    title: 'MEN',
-    subMenu: [
-      {
-        id: 5,
-        title: 'NEW IN'
-      },
-      {
-        id: 6,
-        title: 'JACKETS'
-      },
-      {
-        id: 7,
-        title: 'BLAZERS'
-      },
-      {
-        id: 8,
-        title: 'TROUSERS'
-      },
-      {
-        id: 9,
-        title: 'JEANS'
-      },
-      {
-        id: 10,
-        title: 'SHORTS'
-      },
-      {
-        id: 11,
-        title: 'SHOES'
-      }
-    ]
-  },
-  {
-    id: 2,
-    title: 'WOMEN',
-    subMenu: [
-      {
-        id: 12,
-        title: 'NEW IN'
-      },
-      {
-        id: 13,
-        title: 'JACKETS'
-      },
-      {
-        id: 14,
-        title: 'BLAZERS'
-      },
-      {
-        id: 15,
-        title: 'TROUSERS'
-      },
-      {
-        id: 16,
-        title: 'JEANS'
-      },
-      {
-        id: 17,
-        title: 'SHORTS'
-      },
-      {
-        id: 18,
-        title: 'SHOES'
-      }
-    ]
-  },
-  {
-    id: 3,
-    title: 'KIDS'
-  },
-  {
-    id: 4,
-    title: 'ACCESORIES'
-  }
-];
-
+var menuItems = category
 
 const menusSecondaryItems = [
-  {
-    id: 190,
-    title: 'Login',
-    icon: 'ios-person',
-    key: 'login'
-  },
-  {
-    id: 519,
-    title: 'Signup',
-    icon: 'ios-person-add',
-    key: 'signup'
-  },
   {
     id: 19,
     title: 'Wish List',

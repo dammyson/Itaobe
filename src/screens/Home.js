@@ -4,11 +4,16 @@
 
 // React native and others libraries imports
 import React, { Component } from 'react';
-import { Image } from 'react-native';
+import { Image, AsyncStorage } from 'react-native';
 import { Container, Content, View, Button, Left, Right, Icon, Card, CardItem, cardBody } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 
 // Our custom files and classes import
+
+
+handleBackPress = () => {
+ 
+}
 
 
 import Navbar from './navigations/Navbar';
@@ -17,6 +22,27 @@ import CategoryBlock from './navigations/CategoryBlock';
 
 
 export default class Home extends Component {
+
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      user_id: '',
+      session_id: '',
+    };
+  }
+
+
+  componentWillMount() {
+    AsyncStorage.getItem('user_id').then((value) => {
+        this.setState({ 'user_id': value.toString()})    
+    })
+    AsyncStorage.getItem('session_id').then((value) => {
+      this.setState({ 'session_id': value.toString()})
+      })
+  }
+
+
   render() {
     var left = (
       <Left style={{flex:1}}>
@@ -27,18 +53,18 @@ export default class Home extends Component {
     );
     var right = (
       <Right style={{flex:1}}>
-        <Button onPress={() => Actions.search()} transparent>
-          <Icon name='search'  style={{color: "#FFF"}}/>
+        <Button onPress={() => Actions.wishlist()} transparent>
+          <Icon name='heart'  size={15} style={{color: "#FFF"}}/>
         </Button>
         <Button onPress={() => Actions.cart()} transparent>
-          <Icon name='cart' style={{color: "#FFF"}}/>
+          <Icon name='cart'  size={15} style={{color: "#FFF"}}/>
         </Button>
       </Right>
     );
     return(
       <SideMenuDrawer styles={{marginTop:2}} ref={(ref) => this._sideMenuDrawer = ref}>
           <Container>
-            <Navbar left={left} right={right} title="MY STORE" />
+            <Navbar left={left} right={right} title={this.state.user_id} />
             <Content>
               {this.renderCategories()}
             </Content>
@@ -61,23 +87,44 @@ export default class Home extends Component {
 
 var categories = [
   {
-    id: 1,
-    title: 'MEN',
-    image: 'http://res.cloudinary.com/atf19/image/upload/c_scale,w_489/v1500284127/pexels-photo-497848_yenhuf.jpg'
+    id: 2172,
+    image: 'https://www.ita-obe.com/images/ofidy-banner-grocery-6.jpg',
+    title: 'Tubers'
   },
   {
-    id: 2,
-    title: 'WOMEN',
-    image: 'http://res.cloudinary.com/atf19/image/upload/c_scale,w_460/v1500284237/pexels-photo-324030_wakzz4.jpg'
+    id: 2176,
+    image: 'https://www.ita-obe.com/images/ofidy-banner-grocery-8.jpg',
+    title: 'Oil'
   },
   {
-    id: 3,
-    title: 'KIDS',
-    image: 'http://res.cloudinary.com/atf19/image/upload/c_scale,w_445/v1500284286/child-childrens-baby-children-s_shcevh.jpg'
+    id: 2179,
+    image: 'https://www.ita-obe.com/images/ofidy-banner-grocery-7.jpg',
+    title: 'Spice'
   },
   {
-    id: 4,
-    title: 'ACCESORIES',
-    image: 'http://res.cloudinary.com/atf19/image/upload/c_scale,w_467/v1500284346/pexels-photo-293229_qxnjtd.jpg'
+    id: 2178,
+    image: 'https://www.ita-obe.com/images/ofidy-banner-grocery-5.jpg',
+    title: 'Food Sharing'
+  } ,
+  {
+    id: 2177,
+    image: 'https://www.ita-obe.com/images/ofidy-banner-grocery-3.jpg',
+    title: 'Vegetables'
+  },
+  {
+    id: 2203,
+    image: 'https://www.ita-obe.com/images/ofidy-banner-grocery-4.jpg',
+    title: 'Fresh'
+  },
+  {
+    id: 2175,
+    image: 'https://www.ita-obe.com/images/ofidy-banner-grocery-1.jpg',
+    title: 'Grains'
+  }
+  ,
+  {
+    id: 2170,
+    image: 'https://www.ita-obe.com/images/ofidy-banner-grocery-2.jpg',
+    title: 'Spice'
   }
 ];

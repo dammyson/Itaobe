@@ -23,10 +23,6 @@ export default class CategoryBlock extends Component {
             <Image style={styles.image} source={{uri: this.props.image}} />
             <View style={styles.overlay} />
             <View style={styles.border} />
-            <View style={styles.text}>
-              <Text style={styles.title}>{this.props.title}</Text>
-              <Text style={styles.subtitle}>Shop Now</Text>
-            </View>
           </View>
         </TouchableOpacity>
       </View>
@@ -34,7 +30,7 @@ export default class CategoryBlock extends Component {
   }
 
   _onPress() {
-    Actions.category({id: this.props.id, title: this.props.title});
+    Actions.grid({ title: this.props.title, cat: this.props.id, ctg: 0});
   }
 }
 
@@ -76,8 +72,12 @@ const styles = {
     borderColor: 'rgba(253, 253, 253, 0.2)'
   },
   image: {
-    height: 200,
+    height: 120,
+    marginLeft:3,
+    marginRight:3,
+    marginTop:8,
     width: null,
-    flex: 1
+    flex: 1,
+    justifyContent: 'center'
   }
 };

@@ -7,14 +7,13 @@
 */
 
 import React, {Component, AppRegistry} from 'react';
-import AppNavigator from './src/screens/navigations/AppNavigator';
-import Main from './src/screens/navigations/Menu';
+import TabNavigator from '../screens/navigations/TabNavigator';
 
-export default class App extends Component{
+export default class MainView extends Component{
  
   render() {
     return (
-      <Main/>
+      <TabNavigator/>
     );
   }
 }
