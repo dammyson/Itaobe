@@ -1,7 +1,7 @@
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Image, Dimensions, ImageBackground} from 'react-native';
-
+import {Platform, StyleSheet, AsyncStorage, View, Image, Dimensions, ImageBackground} from 'react-native';
+import { Actions } from 'react-native-router-flux';
 
 export default class Splash extends Component{
 
@@ -15,9 +15,13 @@ export default class Splash extends Component{
     }
 
   async componentDidMount(){
+    AsyncStorage.setItem('aut', "no");
     const data = await this.performinTimeConsumingTask();
     if(data !== null){
-     this.props.navigation.navigate('SignIn');
+      Actions.pop();
+      Actions.home({email: "jesus"});
+     
+     //this.props.navigation.navigate('Home');
     }
   }
 

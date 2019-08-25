@@ -1,18 +1,15 @@
 'use strict'
 import React, {Component} from 'react'
 import {
-    Text,
-    Image,
-    View,
+
     StyleSheet,
     TouchableOpacity,
     ScrollView,
     Dimensions
 } from 'react-native'
-import Icon from 'react-native-vector-icons'
+import { Container, Content,Icon, View, Button, Left, Right, Card, CardItem, cardBody } from 'native-base';
+import { Actions } from 'react-native-router-flux';
 
-
-import Container from './../../resources/components/Container'
 import ListPanel from './../../resources/components/ListPanel'
 import SwiperProductThumb from './../../resources/components/product/SwiperProductThumb'
 
@@ -24,26 +21,37 @@ import homeData from './../../data/home'
 
 import Utils from './../../resources/helpers/Utils'
 
+import Navbar from '../navigations/Navbar';
+import SideMenuDrawer from '../navigations/SideMenuDrawer';
+
 var {height, width} = Dimensions.get('window');
 const initWidth = width;
 const initHeight = initWidth * (500/900)
 
 class ListSwiper extends Component {
-    static navigationOptions = {
-        drawerLabel: 'List Swiper Material',
-        drawerIcon: ({ tintColor }) => (
-            <Icon style={styles.icon} name='list' size={16}/>
-        ),
-    };
 
     constructor(props) {
         super(props)
     }
 
     render() {
+        var left = (
+            <Left style={{ flex: 1 }}>
+              <Button onPress={() => Actions.pop()} transparent>
+                <Icon name='ios-arrow-back' style={{color: "#FFF"}} />
+              </Button>
+            </Left>
+          );
+          var right = (
+            <Right style={{ flex: 1 }}>
+              <Button onPress={() => Actions.cart()} transparent>
+                <Icon name='ios-cart' style={{color: "#FFF"}} />
+              </Button>
+            </Right>
+          );
         return (
             <Container>
-                <Header navigation={this.props.navigation} title="Swiper List"/>
+                <Navbar left={left} right={right} title="MY STORE" />
                 <ScrollView>
                     {this._renderSwiperList(homeData.fashions)}
                     {this._renderSwiperList(homeData.watches)}
@@ -71,11 +79,11 @@ class ListSwiper extends Component {
     }
 
     _pressProduct(){
-        Utils.showMessage('You clicked on a product')
+        Actions.product({email: "jesus"});
     }
 
     _pressSeeAllProducts(){
-        Utils.showMessage('You clicked to see all products')
+        Actions.grid({email: "jesus"});
     }
 }
 

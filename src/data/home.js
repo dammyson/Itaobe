@@ -167,6 +167,38 @@ const homeData = {
                 prize: 8.00,
                 regularPrize: 10.00,
                 discountPercent: 20
+            },
+            {
+                id: 3,
+                name: 'iPhone 7 Plus 6S Plus 6 Plus Screen Protector,',
+                imageUri: 'https://c1.staticflickr.com/6/5545/10770069154_b626552554_b.jpg',
+                prize: 30.10,
+                regularPrize: 39.99,
+                discountPercent: 25
+            },
+            {
+                id: 4,
+                name: 'Skip Hop Moby Bath Tear-Free Waterfall Rinser, Blue',
+                imageUri: 'https://c1.staticflickr.com/9/8142/6974554082_5b5a7ef762_z.jpg',
+                prize: 8.00,
+                regularPrize: 10.00,
+                discountPercent: 20
+            },
+            {
+                id: 3,
+                name: 'iPhone 7 Plus 6S Plus 6 Plus Screen Protector,',
+                imageUri: 'https://c1.staticflickr.com/6/5545/10770069154_b626552554_b.jpg',
+                prize: 30.10,
+                regularPrize: 39.99,
+                discountPercent: 25
+            },
+            {
+                id: 4,
+                name: 'Skip Hop Moby Bath Tear-Free Waterfall Rinser, Blue',
+                imageUri: 'https://c1.staticflickr.com/9/8142/6974554082_5b5a7ef762_z.jpg',
+                prize: 8.00,
+                regularPrize: 10.00,
+                discountPercent: 20
             }
         ]
     },

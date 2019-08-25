@@ -1,62 +1,134 @@
 'use strict'
 import React, {Component} from 'react'
 import {
-    Text,
-    Image,
-    View,
     StyleSheet,
-    TouchableOpacity,
     ScrollView,
-    Dimensions
+    Dimensions,
+    ActivityIndicator,
+    Text
 } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome'
-
-import Container from './../../resources/components/Container'
+import { Container, Content,Icon, View, Button, Left, Right, Card, CardItem, cardBody } from 'native-base';
+import { Actions } from 'react-native-router-flux';
 import ListPanel from './../../resources/components/ListPanel'
 
 import GridProductThumb from './../../resources/components/product/GridProductThumb'
 import Grid from './../../resources/components/Grid'
 import colors from './../../resources/styles/colors'
-import Header from './../../resources/components/Header'
+
 
 import homeData from './../../data/home'
 
 import Utils from './../../resources/helpers/Utils'
+
+
+import Navbar from '../navigations/Navbar';
+
 
 var {height, width} = Dimensions.get('window');
 const initWidth = width;
 const initHeight = initWidth * (500/900)
 
 class ListGrid extends Component {
-    static navigationOptions = {
-        drawerLabel: 'List Grid Material',
-        drawerIcon: ({ tintColor }) => (
-            <Icon style={styles.icon} name='list' size={16}/>
-        ),
-    };
+ 
 
     constructor(props) {
         super(props)
+        this.state = {
+            loading: false,
+            data:[],
+            title:"",
+            cat: "", 
+            ctg: "", 
+         }
     }
 
+
+    componentDidMount() {
+       this.getProduct();
+
+     }
+
+    componentWillMount() {
+         this.setState({cat: this.props.cat, ctg: this.props.ctg, title: this.props.title});
+      }
+    
+
+    getProduct()
+    {
+        const {cat, ctg} = this.state
+        this.setState({ loading: true})
+        const formData = new FormData();
+        formData.append('feature', "product");
+        formData.append('action', "get");
+        formData.append('cat', cat);
+        formData.append('ctg', ctg);
+        fetch('https://www.ita-obe.com/mobile/v1/product.php', { method: 'POST',  headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        }, body:formData,  
+        })
+        .then(res => res.json())
+        .then(res => {
+          console.warn(res.data);
+          if(!res.error){
+          this.setState({ 
+              loading: false,
+              data:res.data
+            })
+
+          }else{
+        Alert.alert('Registration failed', res.message, [{text: 'Okay'}])
+        this.setState({ loading: false})
+          }
+        }).catch((error)=>{
+          console.warn(error);
+          alert(error.message);
+       });
+   }
+
+
+
     render() {
+        if (this.state.loading) {
+            return (
+              <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <ActivityIndicator />
+                <Text> Getting Products </Text>
+              </View>
+            );
+          }
+        var left = (
+            <Left style={{ flex: 1 }}>
+              <Button onPress={() => Actions.pop()} transparent>
+                <Icon name='ios-arrow-back' style={{color: "#FFF"}} />
+              </Button>
+            </Left>
+          );
+          var right = (
+            <Right style={{ flex: 1 }}>
+              <Button onPress={() => Actions.cart()} transparent>
+                <Icon name='ios-cart' style={{color: "#FFF"}} />
+              </Button>
+            </Right>
+          );
+
         return (
-            <Container>
-                <Header navigation={this.props.navigation} title="Grid List"/>
-                <ScrollView>
-                    {this._renderGridList(homeData.grid_fashion)}
-                    {this._renderGridList(homeData.grid_bag)}
-                </ScrollView>
-            </Container>
+           
+                <Container>
+                    <Navbar left={left} right={right} title={this.state.title} />
+                    <ScrollView>
+                        {this._renderGridList(this.state.data)}
+                    </ScrollView>
+                </Container>
         )
     }
 
     _renderGridList(data) {
         return (
-            <ListPanel onPressSeeAll={() => this._pressSeeAllProducts({navBarTitle: data.title})} title={data.title} description={data.description}>
+            <ListPanel>
                 <Grid>
                     {
-                        data.items.map((item, idx) => {
+                        data.map((item, idx) => {
                             return <GridProductThumb onPress={() => this._pressProduct(item.id)} key={idx} { ...item }/>
                         })
                     }
@@ -65,8 +137,8 @@ class ListGrid extends Component {
         )
     }
 
-    _pressProduct(){
-        Utils.showMessage('You clicked on a product')
+    _pressProduct(value){
+        Actions.product({id: value })
     }
 
     _pressSeeAllProducts(){

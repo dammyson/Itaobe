@@ -1,8 +1,9 @@
 
 import React, {Component} from 'react';
-import {ActivityIndicator, ImageBackground, StyleSheet, Text, View, Dimensions, TouchableOpacity, TextInput} from 'react-native';
+import {ActivityIndicator,ScrollView, KeyboardAvoidingView, ImageBackground, StyleSheet, Text, View, Dimensions, TouchableOpacity,Alert, TextInput} from 'react-native';
 import { Card, Icon,SocialIcon} from 'react-native-elements'
-import assetHelper from '../../assets/assetsHelper'
+import colors from './../../resources/styles/colors'
+import { Actions } from 'react-native-router-flux';
 export default class SignUP extends Component{
 
   constructor(props) 
@@ -12,8 +13,10 @@ export default class SignUP extends Component{
         loading: false,
         email: "", 
         phone: "", 
-        name: "", 
-        password: ""
+        uname: "", 
+        lname: "", 
+        lname: "", 
+        password: "",
                   }
 
   }
@@ -21,35 +24,47 @@ export default class SignUP extends Component{
   checkReg()
     {
     
-        const {email,phone, name, password} = this.state
+        const {email,phone, uname, fname, lname,  password} = this.state
 
-          if(email == "" || password == "" || name == "" || phone == "" ){
+          if(email == "" || password == "" || phone == "" || uname == "" || lname == ""|| fname == ""){
             Alert.alert('Validation failed', 'field(s) cannot be empty', [{text: 'Okay'}])
             return
           }
         this.setState({ loading: true})
-        fetch(URL.url+'/api/register', { method: 'POST',  headers: {
+        const formData = new FormData();
+        formData.append('feature', "user");
+        formData.append('action', "register");
+        formData.append('pwd', password);
+        formData.append('email', email);
+        formData.append('fname', fname);
+        formData.append('lname', lname);
+        formData.append('uname', uname);
+        formData.append('mobile', phone);
+        formData.append('telephone', phone);
+        formData.append('memword', "food");
+        formData.append('day', "2");
+        formData.append('month', "2");
+        formData.append('year', "1990");
+        formData.append('gender', "M");
+
+        fetch('https://www.ita-obe.com/mobile/v1/user.php', { method: 'POST',  headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-        }, body: JSON.stringify({
-          name: name,
-          email: email,
-          password: password,
-        }),  })
+        }, body:formData,  
+        })
         .then(res => res.json())
         .then(res => {
-
-          if(res.status){
+          console.warn(res);
+          if(!res.error){
           this.setState({ loading: false})
-          this.props.navigation.navigate('Login')
+          Actions.login();
 
           }else{
-
-        Alert.alert('Login failed', "Check your email and password", [{text: 'Okay'}])
+        Alert.alert('Registration failed', res.message, [{text: 'Okay'}])
         this.setState({ loading: false})
           }
         }).catch((error)=>{
-          console.log("Api call error");
+          console.warn(error);
           alert(error.message);
        });
    }
@@ -73,83 +88,118 @@ export default class SignUP extends Component{
     
          <View style={styles.slidetop}>
          <Text style={styles.getW}>Get started</Text>
-         <Text style={styles.headW}></Text>
-         <View  style={styles.socialtop}>
-             
-   </View>
-
-       
          </View>
          <View style={styles.slidemid}>
         
                 <Text style={styles.headW}>sign up with</Text>
-                <View style={styles.card} >
-                <TextInput
-                    placeholder= "Email"
-                    placeholderTextColor= '#000'
-                    returnKeyType = "next"
-                    onSubmitEditing = {() => this.passwordInput.focus()}
-                    keyboardType = "numeric"
-                    autoCapitalize= "none"
-                    autoCorrect = {false}
-                    style = {styles.input}
-                    onChangeText = {text => this.setState({username: text})}
-                    />  
-                     <View style = {styles.lineStyle} />
-                <TextInput
-                    placeholder= "Phone"
-                    placeholderTextColor= '#000'
-                    returnKeyType = "next"
-                    onSubmitEditing = {() => this.passwordInput.focus()}
-                    keyboardType = "numeric"
-                    autoCapitalize= "none"
-                    autoCorrect = {false}
-                    style = {styles.input}
-                    onChangeText = {text => this.setState({username: text})}
-                    />  
-                <View style = {styles.lineStyle} />
-                <TextInput
-                    placeholder= "******"
-                    secureTextEntry
-                    placeholderTextColor= '#000'
-                    returnKeyType = "next"
-                    onSubmitEditing = {() => this.passwordInput.focus()}
-                    keyboardType = "numeric"
-                    autoCapitalize= "none"
-                    autoCorrect = {false}
-                    style = {styles.input}
-                    onChangeText = {text => this.setState({username: text})}
-                    />  
-                    <View style = {styles.lineStyle} />
-                <TextInput
-                    placeholder= "******"
-                    secureTextEntry
-                    keyboardType = "numeric"
-                    placeholderTextColor= '#000'
-                    returnKeyType= "go"
-                    style = {styles.input}
-                    onChangeText = {text => this.setState({password: text})}
-                    ref={(input)=> this.passwordInput = input}
-                    />
+                <KeyboardAvoidingView style={{ flex: 1,  flexDirection: 'column',justifyContent: 'center',}} behavior="padding" enabled   keyboardVerticalOffset={100}>
+                   <ScrollView >
 
- </View>
-         </View>
-         <View style={styles.slidebases}>
-                    <Text style={{ marginLeft:20, fontSize: 14, marginRight:12, marginBottom:20, textAlign: 'center',fontWeight: '500',}}> 
+                     <View style={{paddingBottom:100}}>
+                    <View style={styles.card} >
+                         <TextInput
+                          placeholder= "Email"
+                          placeholderTextColor= '#000'
+                          returnKeyType = "next"
+                          onSubmitEditing = {() => this.passwordInput.focus()}
+                          keyboardType = "numeric"
+                          autoCapitalize= "none"
+                          autoCorrect = {false}
+                          style = {styles.input}
+                          onChangeText = {text => this.setState({email: text})}
+                          />  
+                          <View style = {styles.lineStyle} />
+                          <TextInput
+                          placeholder= "First Name"
+                          placeholderTextColor= '#000'
+                          returnKeyType = "next"
+                          onSubmitEditing = {() => this.passwordInput.focus()}
+                          keyboardType = "numeric"
+                          autoCapitalize= "none"
+                          autoCorrect = {false}
+                          style = {styles.input}
+                          onChangeText = {text => this.setState({fname: text})}
+                          />  
+                          <View style = {styles.lineStyle} />
+
+
+                          <TextInput
+                          placeholder= "Last name"
+                          placeholderTextColor= '#000'
+                          returnKeyType = "next"
+                          onSubmitEditing = {() => this.passwordInput.focus()}
+                          keyboardType = "numeric"
+                          autoCapitalize= "none"
+                          autoCorrect = {false}
+                          style = {styles.input}
+                          onChangeText = {text => this.setState({lname: text})}
+                          />  
+                          <View style = {styles.lineStyle} />
+
+                           <TextInput
+                          placeholder= "Username"
+                          placeholderTextColor= '#000'
+                          returnKeyType = "next"
+                          onSubmitEditing = {() => this.passwordInput.focus()}
+                          keyboardType = "numeric"
+                          autoCapitalize= "none"
+                          autoCorrect = {false}
+                          style = {styles.input}
+                          onChangeText = {text => this.setState({uname: text})}
+                          />  
+                          <View style = {styles.lineStyle} />
+
+
+                        <TextInput
+                            placeholder= "Phone"
+                            placeholderTextColor= '#000'
+                            returnKeyType = "next"
+                            onSubmitEditing = {() => this.passwordInput.focus()}
+                            keyboardType = "numeric"
+                            autoCapitalize= "none"
+                            autoCorrect = {false}
+                            style = {styles.input}
+                            onChangeText = {text => this.setState({phone: text})}
+                            />  
+                        <View style = {styles.lineStyle} />
+                        <TextInput
+                            placeholder= "Password"
+                            secureTextEntry
+                            placeholderTextColor= '#000'
+                            returnKeyType = "next"
+                            onSubmitEditing = {() => this.passwordInput.focus()}
+                            keyboardType = "numeric"
+                            autoCapitalize= "none"
+                            autoCorrect = {false}
+                            style = {styles.input}
+                            onChangeText = {text => this.setState({password: text})}
+                            />  
+                          
+                      </View>   
+                 
+        
+                    <Text style={{ marginLeft:20, fontSize: 14, marginRight:12, marginBottom:20, marginTop:10,  textAlign: 'center',fontWeight: '500',}}> 
                     By clicking on the create account button you agree with our <Text style={{fontWeight: 'bold'}}>Term of service </Text> and  
                     <Text style={{fontWeight: 'bold'}}> Privacy Policy</Text>
-                   </Text> 
-         <TouchableOpacity style={styles.buttonContainer} 
-           onPress ={() =>  this.props.navigation.navigate('SignUp')} >
-            <Text style={styles.buttonText}
-          >Sign Up</Text>
+                     </Text> 
+                     <View style={styles.buttonView}>
+                     <TouchableOpacity style={styles.buttonContainer} 
 
-          </TouchableOpacity>
-          <View style={styles.bottom}>
-                <Text >Already have an account?</Text>
-                 <Text  style={{fontWeight: 'bold',  marginLeft:10,}}
-                  onPress ={() =>  this.props.navigation.navigate('SignIn')}>Log In</Text>
-          </View>
+                     onPress ={() => this.checkReg()} >
+                        <Text style={styles.buttonText}
+                      >Sign Up</Text>
+
+                    </TouchableOpacity>
+                    </View>
+                      <View style={styles.bottom}>
+                            <Text >Already have an account?</Text>
+                            <Text  style={{fontWeight: 'bold',  marginLeft:10,}}
+                              onPress ={() => Actions.login({email: "jesus"})}>Log In</Text>
+                      </View>
+                      </View>
+                       </ScrollView>
+                  </KeyboardAvoidingView>
+
          </View>
       </View>
       </ImageBackground>
@@ -168,7 +218,7 @@ const styles = StyleSheet.create({
   },
 
   slidetop: {
-    flex: 3, 
+    flex: 1, 
     justifyContent: 'flex-end',
     alignItems: 'flex-start',
     padding:2,
@@ -181,10 +231,9 @@ const styles = StyleSheet.create({
     margin:20,
   },
   slidemid: {
-    flex: 3,
+    flex: 5,
   },
-  slidebases: {
-    flex: 2,
+  buttonView: {
     justifyContent: 'center',
     alignItems: 'center',
    
@@ -198,8 +247,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginLeft:10,
     marginRight:10,
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 15,
+    fontWeight: '400',
+    backgroundColor: '#ffe6e6',
 
 
 },
@@ -214,8 +264,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   buttonContainer:{
-    height:50,
-    backgroundColor: assetHelper.bgcolor,
+    height:45,
+    backgroundColor: colors.bg_color,
     borderRadius: 30,
     alignItems: 'center',
     width: 300,
@@ -254,8 +304,6 @@ const styles = StyleSheet.create({
     marginBottom:10
   },
   card: {
-    flex: 1,
-    justifyContent: 'center',
     backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -264,7 +312,10 @@ const styles = StyleSheet.create({
     elevation: 2,
     marginLeft: 20,
     marginRight: 20,
-    borderRadius: 15,
+    borderRadius: 10,
+    paddingBottom: 10,
+    paddingTop: 10,
+    
    
   
   },

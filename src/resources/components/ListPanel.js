@@ -13,7 +13,7 @@ import Line from './Line'
 
 class ListPanel extends Component {
     static propTypes = {
-        title: PropTypes.string.isRequired,
+        title: PropTypes.string,
         description: PropTypes.string,
         onPressSeeAll: PropTypes.func
     }
@@ -28,14 +28,6 @@ class ListPanel extends Component {
             <View>
                 <View style={styles.holder}>
                     <View style={ styles.header }>
-                        <View style={ headerLeftPartStyle }>
-                            <Text style={{ fontSize: 16 }}>{ this.props.title }</Text>
-                            <Text style={{ color: colors.txt_description }}>{ this.props.description }</Text>
-                        </View>
-                        <TouchableOpacity onPress={ this.props.onPressSeeAll } style={ styles.headerRightPart }>
-                            <Text style={{ marginRight: 10, color: colors.txt_dark }}>See All</Text>
-                            <Icon style={{ color: colors.txt_dark }} name='angle-right' size={ 23 } />
-                        </TouchableOpacity>
                     </View>
 
                     { this.props.children }
