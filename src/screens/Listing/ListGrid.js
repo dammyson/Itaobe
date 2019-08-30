@@ -55,16 +55,17 @@ class ListGrid extends Component {
 
     getProduct()
     {
-        const {cat, ctg} = this.state
+       
+      const {cat, ctg} = this.state
         this.setState({ loading: true})
         const formData = new FormData();
         formData.append('feature', "product");
         formData.append('action', "get");
         formData.append('cat', cat);
         formData.append('ctg', ctg);
+        
         fetch('https://www.ita-obe.com/mobile/v1/product.php', { method: 'POST',  headers: {
           Accept: 'application/json',
-          'Content-Type': 'application/json',
         }, body:formData,  
         })
         .then(res => res.json())
@@ -77,13 +78,15 @@ class ListGrid extends Component {
             })
 
           }else{
-        Alert.alert('Registration failed', res.message, [{text: 'Okay'}])
-        this.setState({ loading: false})
+          Alert.alert('Registration failed', res.message, [{text: 'Okay'}])
+          this.setState({ loading: false})
           }
         }).catch((error)=>{
           console.warn(error);
-          alert(error.message);
+         // alert(error.message);
        });
+
+      
    }
 
 

@@ -23,12 +23,10 @@ export default class Product extends Component {
       sellers: {},
       activeSlide: 0,
       quantity: 1,
-      id:'',
+      id: '',
       aut: '',
       user_id: '',
       session_id: '',
-      agent_id:'',
-      pro_name:'',
     };
   }
 
@@ -87,7 +85,56 @@ export default class Product extends Component {
        });
    }
  
+   addToCart() {
+  
+    const {aut, quantity, product, user_id, id, sellers, session_id} = this.state
+    if(aut == "" || aut == "no"){
+      Alert.alert(
+        'Login Out',
+        'You are not logged in, log in to add this item to cart',
+        [
+          {text: 'Cancel', onPress: () => console.log('Cancel Pressed!')},
+          {text: 'OK', onPress: () => Actions.login()},
+        ],
+        { cancelable: false }
+      )
+      return
+    }
 
+              this.setState({ loading: true})
+
+              const formData = new FormData();
+              formData.append('feature', "cart");
+              formData.append('action', "add");
+              formData.append('prodid', id);
+              formData.append('prodname', product.name);
+              formData.append('agentid', sellers.agentID);
+              formData.append('qty', quantity);
+              formData.append('id', user_id);
+              formData.append('sid', session_id);
+              
+              fetch('https://www.ita-obe.com/mobile/v1/cart.php', { method: 'POST',  headers: {
+                Accept: 'application/json',
+              }, body:formData,  
+              })
+              .then(res => res.json())
+              .then(res => {
+                if(!res.error){
+                this.setState({ 
+                    loading: false,
+                  })
+                 
+                  Alert.alert('Success', res.mesaage, [{text: 'Okay'}])
+                }else{
+              Alert.alert('Adding to cart failed', res.message, [{text: 'Okay'}])
+              this.setState({ loading: false})
+                }
+              }).catch((error)=>{
+                console.warn(error);
+                alert(error.message);
+            });
+
+  }
 
 
   render() {
@@ -213,45 +260,7 @@ export default class Product extends Component {
     Actions.imageGallery({ images: this.state.product.images, position: pos });
   }
 
-  addToCart() {
-   
-    const {aut, user_id, session_id} = this.state
-    if(aut == "" || aut == "no"){
-      Alert.alert(
-        'Login Out',
-        'You are not logged in, log in to add this item to cart',
-        [
-          {text: 'Cancel', onPress: () => console.log('Cancel Pressed!')},
-          {text: 'OK', onPress: () => Actions.login()},
-        ],
-        { cancelable: false }
-      )
-      return
-    }
-
-  
-  /*  var product = this.state.product;
-    product['color'] = this.state.selectedColor;
-    product['size'] = this.state.selectedSize;
-    product['quantity'] = this.state.quantity;
-    AsyncStorage.getItem("CART", (err, res) => {
-      if (!res) AsyncStorage.setItem("CART", JSON.stringify([product]));
-      else {
-        var items = JSON.parse(res);
-        items.push(product);
-        AsyncStorage.setItem("CART", JSON.stringify(items));
-      }
-      Toast.show({
-        text: 'Product added to your cart !',
-        position: 'bottom',
-        type: 'success',
-        buttonText: 'Dismiss',
-        duration: 3000
-      });
-    });
-
-    */
-  }
+ 
 
   addToWishlist() {
     var product = this.state.product;

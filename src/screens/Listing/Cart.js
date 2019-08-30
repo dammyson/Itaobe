@@ -4,7 +4,7 @@
 
 // React native and others libraries imports
 import React, { Component } from 'react';
-import { Alert, AsyncStorage } from 'react-native';
+import { Alert, AsyncStorage, ActivityIndicator } from 'react-native';
 import { Container, Content, View, Text, Header, Icon, Button, Left, Right, Body, Title, List, ListItem, Thumbnail, Grid, Col } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 
@@ -13,21 +13,80 @@ import Colors from './../../resources/styles/colors';
 import Navbar from '../navigations/Navbar';
 
 export default class Cart extends Component {
+
   constructor(props) {
       super(props);
       this.state = {
-        cartItems: []
+        cartItems: [],
+        loading: false,
+        aut: '',
+        user_id: '',
+        session_id: '',
       };
   }
 
-  componentWillMount() {
-    AsyncStorage.getItem("CART", (err, res) => {
-      if (!res) this.setState({cartItems: []});
-      else this.setState({cartItems: JSON.parse(res)});
-    });
+  componentWillMount() 
+  {
+      this.setState({id: this.props.id });
+      AsyncStorage.getItem('user_id').then((value) => {
+        this.setState({ 'user_id': value.toString()})    
+      })
+      AsyncStorage.getItem('session_id').then((value) => {
+      this.setState({ 'session_id': value.toString()})
+      })
+      AsyncStorage.getItem('aut').then((value) => {
+        this.setState({ 'aut': value.toString()})
+        this.getCart();
+        })
+        
   }
 
+  componentDidMount() {
+   
+  }
+
+  getCart()
+    {
+        const {user_id,session_id} = this.state
+        console.warn(user_id,session_id);
+        this.setState({ loading: true})
+        const formData = new FormData();
+        formData.append('feature', "cart");
+        formData.append('action', "get");
+        formData.append('id', user_id);
+        formData.append('sid', session_id);
+        fetch('https://www.ita-obe.com/mobile/v1/cart.php', { method: 'POST',  headers: {
+          Accept: 'application/json',
+        },body:formData,    
+        })
+        .then(res => res.json())
+        .then(res => {
+          console.warn(res);
+          if(!res.error){
+          this.setState({ 
+              loading: false,
+              cartItems:res.data
+            })
+
+          }else{
+        Alert.alert('Registration failed', res.message, [{text: 'Okay'}])
+        this.setState({ loading: false})
+          }
+        }).catch((error)=>{
+          console.warn(error);
+          alert(error.message);
+       });
+   }
+
   render() {
+    if (this.state.loading) {
+      return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator />
+          <Text> Getting Products </Text>
+        </View>
+      );
+    }
     var left = (
       <Left style={{flex:1}}>
         <Button transparent onPress={() => Actions.pop()}>
@@ -77,15 +136,13 @@ export default class Cart extends Component {
           last={this.state.cartItems.length === i+1}
           onPress={() => this.itemClicked(item)}
         >
-          <Thumbnail square style={{width: 110, height: 90}} source={{ uri: item.image }} />
           <Body style={{paddingLeft: 10}}>
             <Text style={{fontSize: 18}}>
               {item.quantity > 1 ? item.quantity+"x " : null}
               {item.title}
             </Text>
-            <Text style={{fontSize: 16, fontWeight: 'bold', marginBottom: 10}}>{item.price}</Text>
-            <Text style={{fontSize: 14 ,fontStyle: 'italic'}}>Color: {item.color}</Text>
-            <Text style={{fontSize: 14 ,fontStyle: 'italic'}}>Size: {item.size}</Text>
+            <Text style={{fontSize: 16, fontWeight: 'bold', marginBottom: 10}}>{item.name}</Text>
+            <Text style={{fontSize: 14 ,fontStyle: 'italic'}}>price: {item.currency} {item.unitPrice}</Text>
           </Body>
           <Right>
             <Button style={{marginLeft: -25}} transparent onPress={() => this.removeItemPressed(item)}>
@@ -131,9 +188,73 @@ export default class Cart extends Component {
   }
 
   removeAll() {
-    this.setState({cartItems: []})
-    AsyncStorage.setItem("CART",JSON.stringify([]));
+        this.setState({cartItems: []})
+       const {user_id,session_id} = this.state
+        
+        this.setState({ loading: true})
+        const formData = new FormData();
+        formData.append('feature', "cart");
+        formData.append('action', "empty");
+        formData.append('id', user_id);
+        formData.append('sid', session_id);
+        fetch('https://www.ita-obe.com/mobile/v1/cart.php', { method: 'POST',  headers: {
+          Accept: 'application/json',
+        },body:formData,    
+        })
+        .then(res => res.json())
+        .then(res => {
+          if(!res.error){
+          this.setState({ 
+              loading: false,
+              cartItems:res.data
+            })
+
+          }else{
+        Alert.alert('Registration failed', res.message, [{text: 'Okay'}])
+        this.setState({ loading: false})
+          }
+        }).catch((error)=>{
+          console.warn(error);
+          alert(error.message);
+       });
+
+
   }
+
+   removeOne(tid){
+
+    this.setState({cartItems: []})
+    const {user_id,session_id} = this.state
+     
+     this.setState({ loading: true})
+     const formData = new FormData();
+     formData.append('feature', "cart");
+     formData.append('action', "empty");
+     formData.append('id', user_id);
+     formData.append('sid', session_id);
+     formData.append('tid', tid);
+     fetch('https://www.ita-obe.com/mobile/v1/cart.php', { method: 'POST',  headers: {
+       Accept: 'application/json',
+     },body:formData,    
+     })
+     .then(res => res.json())
+     .then(res => {
+       console.warn(res);
+       if(!res.error){
+       this.setState({ 
+           loading: false,
+           cartItems:res.data
+         })
+
+       }else{
+     Alert.alert('Registration failed', res.message, [{text: 'Okay'}])
+     this.setState({ loading: false})
+       }
+     }).catch((error)=>{
+       console.warn(error);
+       alert(error.message);
+    });
+   }
 
   checkout() {
     Actions.checkout({cartItems: this.state.cartItems});

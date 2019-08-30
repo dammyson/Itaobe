@@ -64,7 +64,7 @@ export default class Home extends Component {
     return(
       <SideMenuDrawer styles={{marginTop:2}} ref={(ref) => this._sideMenuDrawer = ref}>
           <Container>
-            <Navbar left={left} right={right} title={this.state.user_id} />
+            <Navbar left={left} right={right} title="Home" />
             <Content>
               {this.renderCategories()}
             </Content>

@@ -82,7 +82,6 @@ export default class SignUP extends Component{
 
          fetch('https://www.ita-obe.com/mobile/v1/user.php', { method: 'POST',  headers: {
             Accept: 'application/json',
-           'Content-Type': 'application/json',
          }, body:formData,  
         })
          .then(res => res.json())
@@ -103,6 +102,7 @@ export default class SignUP extends Component{
 
          }).catch((error)=>{
            console.log("Api call error");
+           console.warn(error);
            alert(error.message);
            this.setState({ loading: false})
         }); 
@@ -134,7 +134,7 @@ export default class SignUP extends Component{
          <View style={styles.slidemid}>
         
                      <Text style={styles.headW}>Login with</Text>
-                      <KeyboardAvoidingView>
+                      <KeyboardAvoidingView  behavior="padding">
                         <View style={styles.card} >
                           <TextInput
                             placeholder= "Email"

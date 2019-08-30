@@ -49,7 +49,6 @@ export default class SignUP extends Component{
 
         fetch('https://www.ita-obe.com/mobile/v1/user.php', { method: 'POST',  headers: {
           Accept: 'application/json',
-          'Content-Type': 'application/json',
         }, body:formData,  
         })
         .then(res => res.json())
@@ -95,7 +94,7 @@ export default class SignUP extends Component{
                 <KeyboardAvoidingView style={{ flex: 1,  flexDirection: 'column',justifyContent: 'center',}} behavior="padding" enabled   keyboardVerticalOffset={100}>
                    <ScrollView >
 
-                     <View style={{paddingBottom:100}}>
+                     <View style={{paddingBottom:200}}>
                     <View style={styles.card} >
                          <TextInput
                           placeholder= "Email"
