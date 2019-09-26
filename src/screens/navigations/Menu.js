@@ -22,6 +22,13 @@ import ListSwiper from '../Listing/ListSwiper';
 import Product from '../Listing/Product';
 import Cart from '../Listing/Cart';
 import WishList from '../Listing/WishList';
+import Order from '../checkout/Order';
+import Address from '../checkout/Address';
+import Payment from '../checkout/Payment';
+import BankDetails from '../checkout/BankDetails';
+import Confirmation from '../checkout/Confirmation';
+import Pay from '../checkout/Pay';
+
 
 
 export default class Main extends Component {
@@ -44,6 +51,12 @@ export default class Main extends Component {
             <Scene key="product" component={Product} hideNavBar />
             <Scene key="cart" component={Cart} modal hideNavBar />
             <Scene key="wishlist" component={WishList} modal hideNavBar />
+            <Scene key="order" component={Order} modal hideNavBar />
+            <Scene key="address" component={Address} modal hideNavBar />
+             <Scene key="payment" component={Payment} modal hideNavBar />
+             <Scene key="bank" component={BankDetails} modal hideNavBar />
+             <Scene key="confirmation" component={Confirmation} modal hideNavBar />
+             <Scene key="pay" component={Pay} modal hideNavBar />
           </Scene>
         </Router>
       </Root>

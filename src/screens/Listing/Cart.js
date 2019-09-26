@@ -35,6 +35,18 @@ export default class Cart extends Component {
       this.setState({ 'session_id': value.toString()})
       })
       AsyncStorage.getItem('aut').then((value) => {
+        if(value.toString() == 'no' ){
+          Alert.alert(
+            'Login Out',
+            'You are not logged in, log in to add this item to cart',
+            [
+              {text: 'Cancel', onPress: () => console.log('Cancel Pressed!')},
+              {text: 'OK', onPress: () => Actions.login()},
+            ],
+            { cancelable: false }
+          )
+          return
+        }
         this.setState({ 'aut': value.toString()})
         this.getCart();
         })
@@ -117,7 +129,7 @@ export default class Cart extends Component {
                 <Col style={{paddingLeft: 5, paddingRight: 10}}>
                   <Button onPress={() => this.removeAllPressed()} style={{borderWidth: 1, borderColor: Colors.bg_color}} block iconRight transparent>
                     <Text style={{color: Colors.navbarBackgroundColor}}>Emtpy Cart</Text>
-                    <Icon style={{color: Colors.navbarBackgroundColor}} name='trash' />
+                    <Icon style={{color: Colors.navbarBackgroundColor}} name='ios-trash' />
                   </Button>
                 </Col>
               </Grid>
@@ -167,13 +179,45 @@ export default class Cart extends Component {
   }
 
   removeItem(itemToRemove) {
-    let items = [];
-    this.state.cartItems.map((item) => {
-      if(JSON.stringify(item) !== JSON.stringify(itemToRemove) )
-        items.push(item);
-    });
-    this.setState({cartItems: items});
-    AsyncStorage.setItem("CART",JSON.stringify(items));
+   console.warn(itemToRemove)
+   const {user_id,session_id} = this.state
+        
+   this.setState({ loading: true})
+   const formData = new FormData();
+   formData.append('feature', "cart");
+   formData.append('action', "delete");
+   formData.append('id', user_id);
+   formData.append('sid', session_id);
+   formData.append('tid', itemToRemove.id);
+   fetch('https://www.ita-obe.com/mobile/v1/cart.php', { method: 'POST',  headers: {
+     Accept: 'application/json',
+   },body:formData,    
+   })
+   .then(res => res.json())
+   .then(res => {
+     if(!res.error){
+     this.setState({ 
+         loading: false,
+       })
+       this.getCart();
+
+     }else{
+   Alert.alert('Registration failed', res.message, [{text: 'Okay'}])
+   this.setState({ loading: false})
+     }
+   }).catch((error)=>{
+     console.warn(error);
+     alert(error.message);
+  });
+
+
+
+
+
+
+
+
+
   }
 
   removeAllPressed() {
@@ -221,43 +265,10 @@ export default class Cart extends Component {
 
   }
 
-   removeOne(tid){
-
-    this.setState({cartItems: []})
-    const {user_id,session_id} = this.state
-     
-     this.setState({ loading: true})
-     const formData = new FormData();
-     formData.append('feature', "cart");
-     formData.append('action', "empty");
-     formData.append('id', user_id);
-     formData.append('sid', session_id);
-     formData.append('tid', tid);
-     fetch('https://www.ita-obe.com/mobile/v1/cart.php', { method: 'POST',  headers: {
-       Accept: 'application/json',
-     },body:formData,    
-     })
-     .then(res => res.json())
-     .then(res => {
-       console.warn(res);
-       if(!res.error){
-       this.setState({ 
-           loading: false,
-           cartItems:res.data
-         })
-
-       }else{
-     Alert.alert('Registration failed', res.message, [{text: 'Okay'}])
-     this.setState({ loading: false})
-       }
-     }).catch((error)=>{
-       console.warn(error);
-       alert(error.message);
-    });
-   }
+ 
 
   checkout() {
-    Actions.checkout({cartItems: this.state.cartItems});
+    Actions.order({cartItems: this.state.cartItems});
   }
 
   itemClicked(item) {

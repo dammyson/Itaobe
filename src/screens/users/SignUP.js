@@ -101,7 +101,7 @@ export default class SignUP extends Component{
                           placeholderTextColor= '#000'
                           returnKeyType = "next"
                           onSubmitEditing = {() => this.passwordInput.focus()}
-                          keyboardType = "numeric"
+                          keyboardType = "email-address"
                           autoCapitalize= "none"
                           autoCorrect = {false}
                           style = {styles.input}
@@ -113,7 +113,7 @@ export default class SignUP extends Component{
                           placeholderTextColor= '#000'
                           returnKeyType = "next"
                           onSubmitEditing = {() => this.passwordInput.focus()}
-                          keyboardType = "numeric"
+                          keyboardType = "email-address"
                           autoCapitalize= "none"
                           autoCorrect = {false}
                           style = {styles.input}
@@ -127,7 +127,7 @@ export default class SignUP extends Component{
                           placeholderTextColor= '#000'
                           returnKeyType = "next"
                           onSubmitEditing = {() => this.passwordInput.focus()}
-                          keyboardType = "numeric"
+                          keyboardType = "email-address"
                           autoCapitalize= "none"
                           autoCorrect = {false}
                           style = {styles.input}
@@ -140,7 +140,7 @@ export default class SignUP extends Component{
                           placeholderTextColor= '#000'
                           returnKeyType = "next"
                           onSubmitEditing = {() => this.passwordInput.focus()}
-                          keyboardType = "numeric"
+                          keyboardType = "email-address"
                           autoCapitalize= "none"
                           autoCorrect = {false}
                           style = {styles.input}
@@ -167,7 +167,7 @@ export default class SignUP extends Component{
                             placeholderTextColor= '#000'
                             returnKeyType = "next"
                             onSubmitEditing = {() => this.passwordInput.focus()}
-                            keyboardType = "numeric"
+                            keyboardType = "email-address"
                             autoCapitalize= "none"
                             autoCorrect = {false}
                             style = {styles.input}

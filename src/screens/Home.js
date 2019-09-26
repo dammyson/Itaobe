@@ -47,17 +47,17 @@ export default class Home extends Component {
     var left = (
       <Left style={{flex:1}}>
         <Button onPress={() => this._sideMenuDrawer.open()} transparent>
-          <Icon name='menu' style={{color: "#FFF"}} />
+          <Icon name='ios-menu' style={{color: "#FFF"}} />
         </Button>
       </Left>
     );
     var right = (
       <Right style={{flex:1}}>
         <Button onPress={() => Actions.wishlist()} transparent>
-          <Icon name='heart'  size={15} style={{color: "#FFF"}}/>
+          <Icon name='ios-heart'  size={15} style={{color: "#FFF"}}/>
         </Button>
         <Button onPress={() => Actions.cart()} transparent>
-          <Icon name='cart'  size={15} style={{color: "#FFF"}}/>
+          <Icon name='ios-cart'  size={15} style={{color: "#FFF"}}/>
         </Button>
       </Right>
     );

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {KeyboardAvoidingView,ImageBackground, StyleSheet, Dimensions, Text, View, ActivityIndicator, Alert, TouchableOpacity, AsyncStorage, TextInput} from 'react-native';
+import {KeyboardAvoidingView,ImageBackground, ScrollView, StyleSheet, Dimensions, Text, View, ActivityIndicator, Alert, TouchableOpacity, AsyncStorage, TextInput} from 'react-native';
 import { Card, Icon,SocialIcon} from 'react-native-elements'
 import colors from './../../resources/styles/colors'
 import { Actions } from 'react-native-router-flux';
@@ -93,7 +93,9 @@ export default class SignUP extends Component{
             AsyncStorage.setItem('email', mail);
             AsyncStorage.setItem("user_id",  res.id);
             AsyncStorage.setItem("session_id",  res.sid);
-             Actions.home()
+            AsyncStorage.setItem("first",  res.id);
+            AsyncStorage.setItem("last",  res.id);
+            Actions.home()
             }else{
           Alert.alert('Login failed', "Check your email and password", [{text: 'Okay'}])
           this.setState({ loading: false})
@@ -123,6 +125,9 @@ export default class SignUP extends Component{
       resizeMode="cover"
       >
       <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.textInputcontainer}>
+         <ScrollView >
+                      <View style={{paddingBottom:300}}>
     
          <View style={styles.slidetop}>
             <Text style={styles.getW}>Welcome back</Text>
@@ -134,7 +139,7 @@ export default class SignUP extends Component{
          <View style={styles.slidemid}>
         
                      <Text style={styles.headW}>Login with</Text>
-                      <KeyboardAvoidingView  behavior="padding">
+                     
                         <View style={styles.card} >
                           <TextInput
                             placeholder= "Email"
@@ -165,7 +170,6 @@ export default class SignUP extends Component{
                           />  
                         </View>
 
-                     </KeyboardAvoidingView>
 
                       <View style={styles.bottomtop}>
                         <TouchableOpacity   style={{marginRight:20}}
@@ -194,6 +198,10 @@ export default class SignUP extends Component{
                  >Sign Up</Text>
           </View>
          </View>
+
+            </View>
+                </ScrollView>
+           </KeyboardAvoidingView>   
       </View>
       </ImageBackground>
     );
@@ -204,6 +212,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    paddingTop: 50
   },
 
   slidetop: {

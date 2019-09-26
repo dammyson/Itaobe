@@ -62,7 +62,8 @@ class ListGrid extends Component {
         formData.append('feature', "product");
         formData.append('action', "get");
         formData.append('cat', cat);
-        formData.append('ctg', ctg);
+        formData.append('ctg', "2006");
+        formData.append('sct', ctg);
         
         fetch('https://www.ita-obe.com/mobile/v1/product.php', { method: 'POST',  headers: {
           Accept: 'application/json',
@@ -85,7 +86,6 @@ class ListGrid extends Component {
           console.warn(error);
          // alert(error.message);
        });
-
       
    }
 
