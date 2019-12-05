@@ -57,13 +57,15 @@ class ListGrid extends Component {
     {
        
       const {cat, ctg} = this.state
+      console.warn(cat, ctg);
         this.setState({ loading: true})
         const formData = new FormData();
         formData.append('feature', "product");
         formData.append('action', "get");
         formData.append('cat', cat);
-        formData.append('ctg', "2006");
+        formData.append('ctg', 2006);
         formData.append('sct', ctg);
+        
         
         fetch('https://www.ita-obe.com/mobile/v1/product.php', { method: 'POST',  headers: {
           Accept: 'application/json',

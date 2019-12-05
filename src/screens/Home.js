@@ -53,12 +53,6 @@ export default class Home extends Component {
     );
     var right = (
       <Right style={{flex:1}}>
-        <Button onPress={() => Actions.wishlist()} transparent>
-          <Icon name='ios-heart'  size={15} style={{color: "#FFF"}}/>
-        </Button>
-        <Button onPress={() => Actions.cart()} transparent>
-          <Icon name='ios-cart'  size={15} style={{color: "#FFF"}}/>
-        </Button>
       </Right>
     );
     return(

@@ -18,10 +18,8 @@ export default class Splash extends Component{
     AsyncStorage.setItem('aut', "no");
     const data = await this.performinTimeConsumingTask();
     if(data !== null){
-      Actions.pop();
-      Actions.home({email: "jesus"});
-     
-     //this.props.navigation.navigate('Home');
+     Actions.replace("home") 
+      //Actions.home({email: "jesus"});
     }
   }
 

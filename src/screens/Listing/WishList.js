@@ -13,20 +13,82 @@ import Colors from './../../resources/styles/colors';
 import Navbar from '../navigations/Navbar';
 
 export default class WishList extends Component {
+ 
   constructor(props) {
-      super(props);
-      this.state = {
-        items: []
-      };
-  }
+    super(props);
+    this.state = {
+      cartItems: [],
+      loading: false,
+      aut: '',
+      user_id: '',
+      session_id: '',
+    };
+}
 
+componentWillMount() 
+{
+    this.setState({id: this.props.id });
+    AsyncStorage.getItem('user_id').then((value) => {
+      this.setState({ 'user_id': value.toString()})    
+    })
+    AsyncStorage.getItem('session_id').then((value) => {
+    this.setState({ 'session_id': value.toString()})
+    })
+    AsyncStorage.getItem('aut').then((value) => {
+      if(value.toString() == 'no' ){
+        Alert.alert(
+          'Login Out',
+          'You are not logged in, log in to add this item to cart',
+          [
+            {text: 'Cancel', onPress: () => console.log('Cancel Pressed!')},
+            {text: 'OK', onPress: () => Actions.login()},
+          ],
+          { cancelable: false }
+        )
+        return
+      }
+      this.setState({ 'aut': value.toString()})
+      this.getCart();
+      })
+      
+}
 
-  componentWillMount() {
-    AsyncStorage.getItem("WISHLIST", (err, res) => {
-      if (!res) this.setState({items: []});
-      else this.setState({items: JSON.parse(res)});
-    });
-  }
+componentDidMount() {
+ 
+}
+
+getList()
+  {
+      const {user_id,session_id} = this.state
+      console.warn(user_id,session_id);
+      this.setState({ loading: true})
+      const formData = new FormData();
+      formData.append('feature', "cart");
+      formData.append('action', "get");
+      formData.append('id', user_id);
+      fetch('https://www.ita-obe.com/mobile/v1/cart.php', { method: 'POST',  headers: {
+        Accept: 'application/json',
+      },body:formData,    
+      })
+      .then(res => res.json())
+      .then(res => {
+        console.warn(res);
+        if(!res.error){
+        this.setState({ 
+            loading: false,
+            cartItems:res.data
+          })
+
+        }else{
+      Alert.alert('Registration failed', res.message, [{text: 'Okay'}])
+      this.setState({ loading: false})
+        }
+      }).catch((error)=>{
+        console.warn(error);
+        alert(error.message);
+     });
+ }
+
 
   render() {
     var left = (

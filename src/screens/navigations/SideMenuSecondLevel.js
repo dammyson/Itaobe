@@ -54,7 +54,7 @@ export default class SideMenuSecondLevel extends Component {
   }
 
   itemClicked(item) {
-    Actions.grid({cat: 0, ctg: item.title,});
+    Actions.grid({cat: 0, title: item.title,  ctg: item.id,});
   }
 
 }

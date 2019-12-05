@@ -95,7 +95,7 @@ export default class Cart extends Component {
       return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <ActivityIndicator />
-          <Text> Getting Products </Text>
+          <Text> Getting cart </Text>
         </View>
       );
     }

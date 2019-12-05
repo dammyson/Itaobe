@@ -4,7 +4,7 @@
 
 // React native and others libraries imports
 import React, { Component } from 'react';
-import { ImageBackground, AsyncStorage, StyleSheet, Dimensions } from 'react-native';
+import { ImageBackground, AsyncStorage, StyleSheet, ActivityIndicator, Dimensions } from 'react-native';
 import { Container, Content, Text,View, Grid, Col, Left, Right, Button, Icon, Picker, ListItem, Body, Radio, Input, Item } from 'native-base';
 import FAIcon  from 'react-native-vector-icons/FontAwesome';
 import { Actions } from 'react-native-router-flux';
@@ -19,7 +19,8 @@ export default class Payement extends Component {
       super(props);
       this.state = {
         payement:{},
-        bill:''
+        bill:'',
+        loading: false,
 
 
       };
@@ -81,8 +82,60 @@ export default class Payement extends Component {
        });
    }
 
+   deliveryVerification() {
+    const { user_id, session_id ,payement} = this.state
+   this.setState({ loading: true })
+   const formData = new FormData();
+   formData.append('feature', "order");
+   formData.append('action', "DeliveryVerify");
+   formData.append('id', user_id,);
+   formData.append('sid', session_id);
+
+   fetch('https://www.ita-obe.com/mobile/v1/order.php', {
+       method: 'POST', headers: {
+           Accept: 'application/json',
+       }, body: formData,
+   })
+       .then(res => res.json())
+       .then(res => {
+           console.warn(res);
+           if (!res.error) {
+               this.setState({
+                   loading: false,
+               })
+
+               Alert.alert(
+                'Success',
+                'Order registered succesfully',
+                [
+                  {text: 'Cancel', onPress: () => Actions.confirmation({paymentDetails: payement})},
+                  {text: 'OK', onPress: () =>   Actions.confirmation({paymentDetails: payement})},
+                ],
+                { cancelable: false }
+              )
+
+           } else {
+               Alert.alert('Registration failed', res.message, [{ text: 'Okay' }])
+               this.setState({ loading: false })
+           }
+       }).catch((error) => {
+           console.warn(error);
+           alert(error.message);
+       });
+}
+
   render() {
     const {payement, bill} = this.state
+
+    if (this.state.loading) {
+      return (
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+              <ActivityIndicator />
+              <Text>Processing</Text>
+          </View>
+      );
+  }
+
 
     var left = (
       <Left style={{flex:1}}>
@@ -155,7 +208,7 @@ export default class Payement extends Component {
     if( payement.paymethod =='bank'){
       Actions.bank({paymentDetails: payement});
      }else if (payement.paymethod =='delivery'){
-      Actions.confirmation({paymentDetails: payement});
+      this.deliveryVerification();
      }else{
       Actions.pay({paymentDetails: payement, total: bill});
      }

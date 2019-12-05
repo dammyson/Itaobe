@@ -28,6 +28,13 @@ import Payment from '../checkout/Payment';
 import BankDetails from '../checkout/BankDetails';
 import Confirmation from '../checkout/Confirmation';
 import Pay from '../checkout/Pay';
+import ForgotPassword from '../users/ForgotPassword';
+import ChangePassword from '../users/ChangePassword';
+import Packages from '../parkages/Packages';
+import Registration from '../parkages/Registration';
+import AddBankAccount from '../parkages/AddBankAccount';
+import Contact from '../users/Contact';
+
 
 
 
@@ -57,6 +64,12 @@ export default class Main extends Component {
              <Scene key="bank" component={BankDetails} modal hideNavBar />
              <Scene key="confirmation" component={Confirmation} modal hideNavBar />
              <Scene key="pay" component={Pay} modal hideNavBar />
+             <Scene key="forgot" component={ForgotPassword} modal hideNavBar />
+             <Scene key="changepassword" component={ChangePassword} modal hideNavBar />
+             <Scene key="packages" component={Packages} modal hideNavBar />
+             <Scene key="reg" component={Registration} modal hideNavBar />
+             <Scene key="bank" component={AddBankAccount} modal hideNavBar />
+             <Scene key="contact" component={Contact} modal hideNavBar />
           </Scene>
         </Router>
       </Root>

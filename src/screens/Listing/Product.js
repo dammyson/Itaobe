@@ -4,7 +4,7 @@
 
 // React native and others libraries imports
 import React, { Component } from 'react';
-import { Image, Text, Dimensions, TouchableWithoutFeedback, ActivityIndicator, Alert,AsyncStorage } from 'react-native';
+import { Image, Text, Dimensions, TouchableWithoutFeedback, ActivityIndicator, Alert, AsyncStorage } from 'react-native';
 import { View, Container, Content, Button, Left, Right, Icon, Picker, Item, Grid, Col, Toast, Text as NBText } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
@@ -30,18 +30,17 @@ export default class Product extends Component {
     };
   }
 
-  componentWillMount() 
-  {
-      this.setState({id: this.props.id });
-      AsyncStorage.getItem('user_id').then((value) => {
-        this.setState({ 'user_id': value.toString()})    
-      })
-      AsyncStorage.getItem('session_id').then((value) => {
-      this.setState({ 'session_id': value.toString()})
-      })
-      AsyncStorage.getItem('aut').then((value) => {
-        this.setState({ 'aut': value.toString()})
-        })
+  componentWillMount() {
+    this.setState({ id: this.props.id });
+    AsyncStorage.getItem('user_id').then((value) => {
+      this.setState({ 'user_id': value.toString() })
+    })
+    AsyncStorage.getItem('session_id').then((value) => {
+      this.setState({ 'session_id': value.toString() })
+    })
+    AsyncStorage.getItem('aut').then((value) => {
+      this.setState({ 'aut': value.toString() })
+    })
   }
 
 
@@ -50,89 +49,90 @@ export default class Product extends Component {
   }
 
 
-  getProduct()
-    {
-        const {id} = this.state
-        this.setState({ loading: true})
-        const formData = new FormData();
-        formData.append('feature', "product");
-        formData.append('action', "getid");
-        formData.append('id', id);
-        fetch('https://www.ita-obe.com/mobile/v1/product.php?action=getid&id='+id+'&feature=product', { method: 'GET',  headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },  
-        })
-        .then(res => res.json())
-        .then(res => {
-          console.warn(res.data.sellers[0]);
-          if(!res.error){
-          this.setState({ 
-              loading: false,
-              product:res.data,
-              sellers:res.data.sellers[0],
-              agent_id: res.data.sellers[0].agent_id,
-              pro_name:res.data.name
-            })
+  getProduct() {
+    const { id } = this.state
+    this.setState({ loading: true })
+    const formData = new FormData();
+    formData.append('feature', "product");
+    formData.append('action', "getid");
+    formData.append('id', id);
+    fetch('https://www.ita-obe.com/mobile/v1/product.php?action=getid&id=' + id + '&feature=product', {
+      method: 'GET', headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json())
+      .then(res => {
+        console.warn(res.data.sellers[0]);
+        if (!res.error) {
+          this.setState({
+            loading: false,
+            product: res.data,
+            sellers: res.data.sellers[0],
+            agent_id: res.data.sellers[0].agent_id,
+            pro_name: res.data.name
+          })
 
-          }else{
-        Alert.alert('Registration failed', res.message, [{text: 'Okay'}])
-        this.setState({ loading: false})
-          }
-        }).catch((error)=>{
-          console.warn(error);
-          alert(error.message);
-       });
-   }
- 
-   addToCart() {
-  
-    const {aut, quantity, product, user_id, id, sellers, session_id} = this.state
-    if(aut == "" || aut == "no"){
+        } else {
+          Alert.alert('Registration failed', res.message, [{ text: 'Okay' }])
+          this.setState({ loading: false })
+        }
+      }).catch((error) => {
+        console.warn(error);
+        alert(error.message);
+      });
+  }
+
+  addToCart() {
+
+    const { aut, quantity, product, user_id, id, sellers, session_id } = this.state
+    if (aut == "" || aut == "no") {
       Alert.alert(
         'Login Out',
         'You are not logged in, log in to add this item to cart',
         [
-          {text: 'Cancel', onPress: () => console.log('Cancel Pressed!')},
-          {text: 'OK', onPress: () => Actions.login()},
+          { text: 'Cancel', onPress: () => console.log('Cancel Pressed!') },
+          { text: 'OK', onPress: () => Actions.login() },
         ],
         { cancelable: false }
       )
       return
     }
 
-              this.setState({ loading: true})
+    this.setState({ loading: true })
 
-              const formData = new FormData();
-              formData.append('feature', "cart");
-              formData.append('action', "add");
-              formData.append('prodid', id);
-              formData.append('prodname', product.name);
-              formData.append('agentid', sellers.agentID);
-              formData.append('qty', quantity);
-              formData.append('id', user_id);
-              formData.append('sid', session_id);
-              
-              fetch('https://www.ita-obe.com/mobile/v1/cart.php', { method: 'POST',  headers: {
-                Accept: 'application/json',
-              }, body:formData,  
-              })
-              .then(res => res.json())
-              .then(res => {
-                if(!res.error){
-                this.setState({ 
-                    loading: false,
-                  })
-                 
-                  Alert.alert('Success', res.mesaage, [{text: 'Okay'}])
-                }else{
-              Alert.alert('Adding to cart failed', res.message, [{text: 'Okay'}])
-              this.setState({ loading: false})
-                }
-              }).catch((error)=>{
-                console.warn(error);
-                alert(error.message);
-            });
+    const formData = new FormData();
+    formData.append('feature', "cart");
+    formData.append('action', "add");
+    formData.append('prodid', id);
+    formData.append('prodname', product.name);
+    formData.append('agentid', sellers.agentID);
+    formData.append('qty', quantity);
+    formData.append('id', user_id);
+    formData.append('sid', session_id);
+
+    fetch('https://www.ita-obe.com/mobile/v1/cart.php', {
+      method: 'POST', headers: {
+        Accept: 'application/json',
+      }, body: formData,
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (!res.error) {
+          this.setState({
+            loading: false,
+          })
+
+          Alert.alert('Success', res.mesaage, [{ text: 'Okay' }])
+        } else {
+          Alert.alert('Adding to cart failed', res.message, [{ text: 'Okay' }])
+          this.setState({ loading: false })
+        }
+      }).catch((error) => {
+        console.warn(error);
+        alert(error.message);
+      });
 
   }
 
@@ -142,21 +142,21 @@ export default class Product extends Component {
       return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <ActivityIndicator />
-          <Text> Getting Products </Text>
+          <Text> Getting Product Details </Text>
         </View>
       );
     }
     var left = (
       <Left style={{ flex: 1 }}>
         <Button onPress={() => Actions.pop()} transparent>
-          <Icon name='ios-arrow-back' style={{color: "#FFF"}} />
+          <Icon name='ios-arrow-back' style={{ color: "#FFF" }} />
         </Button>
       </Left>
     );
     var right = (
       <Right style={{ flex: 1 }}>
         <Button onPress={() => Actions.cart()} transparent>
-          <Icon name='ios-cart' style={{color: "#FFF"}} />
+          <Icon name='ios-cart' style={{ color: "#FFF" }} />
         </Button>
       </Right>
     );
@@ -246,7 +246,7 @@ export default class Product extends Component {
         key={index}
       >
         <Image
-          source={{ uri: 'https://m.ofidy.com/ProductImages/'+item }}
+          source={{ uri: 'https://m.ofidy.com/ProductImages/' + item }}
           style={{ width: Dimensions.get('window').width, height: 350 }}
           resizeMode="cover"
         />
@@ -260,42 +260,66 @@ export default class Product extends Component {
     Actions.imageGallery({ images: this.state.product.images, position: pos });
   }
 
- 
+
 
   addToWishlist() {
-    var product = this.state.product;
-    var success = true;
-    AsyncStorage.getItem("WISHLIST", (err, res) => {
-      if (!res) AsyncStorage.setItem("WISHLIST", JSON.stringify([product]));
-      else {
-        var items = JSON.parse(res);
-        if (this.search(items, product)) {
-          success = false
+    const { aut, quantity, product, user_id, id, sellers, session_id } = this.state
+    if (aut == "" || aut == "no") {
+      Alert.alert(
+        'Login Out',
+        'You are not logged in, log in to add this item to cart',
+        [
+          { text: 'Cancel', onPress: () => console.log('Cancel Pressed!') },
+          { text: 'OK', onPress: () => Actions.login() },
+        ],
+        { cancelable: false }
+      )
+      return
+    }
+
+    this.setState({ loading: true })
+
+    const formData = new FormData();
+    formData.append('feature', "cart");
+    formData.append('action', "add");
+    formData.append('prodid', id);
+    formData.append('prodname', product.name);
+    formData.append('agentid', sellers.agentID);
+    formData.append('id', user_id);
+
+    fetch('https://www.ita-obe.com/mobile/v1/cart.php', {
+      method: 'POST', headers: {
+        Accept: 'application/json',
+      }, body: formData,
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (!res.error) {
+          this.setState({
+            loading: false,
+          })
+          Toast.show({
+            text: 'Product added to your wishlist !',
+            position: 'bottom',
+            type: 'success',
+            buttonText: 'Dismiss',
+            duration: 3000
+          });
+        } else {
+          Toast.show({
+            text: 'This product already exist in your wishlist !',
+            position: 'bottom',
+            type: 'danger',
+            buttonText: 'Dismiss',
+            duration: 3000
+          });
+          this.setState({ loading: false })
         }
-        else {
-          items.push(product);
-          AsyncStorage.setItem("WISHLIST", JSON.stringify(items));
-        }
-      }
-      if (success) {
-        Toast.show({
-          text: 'Product added to your wishlist !',
-          position: 'bottom',
-          type: 'success',
-          buttonText: 'Dismiss',
-          duration: 3000
-        });
-      }
-      else {
-        Toast.show({
-          text: 'This product already exist in your wishlist !',
-          position: 'bottom',
-          type: 'danger',
-          buttonText: 'Dismiss',
-          duration: 3000
-        });
-      }
-    });
+      }).catch((error) => {
+        console.warn(error);
+        alert(error.message);
+      });
+
   }
 
   search(array, object) {

@@ -39,14 +39,7 @@ export default class SideMenu extends Component {
       return(
         <View>
           <View style={{paddingLeft: 15,paddingTop: 25, paddingRight: 15}}>
-            <Item error={this.state.searchError}>
-                <Input
-                  placeholder='Search...'
-                  onChangeText={(text) => this.setState({search: text, searchError: false})}
-                  onSubmitEditing={() => this.search()}
-                />
-                <Icon active name='ios-search' onPress={() => this.search()} />
-            </Item>
+           
           </View>
           <View style={{paddingRight: 15}}>
             <List>
@@ -210,30 +203,21 @@ var menuItems = category
 
 const menusSecondaryItems = [
   {
-    id: 19,
-    title: 'Wish List',
-    icon: 'heart',
-    key: 'wishlist'
-  },
-  {
     id: 20,
-    key: 'map',
-    title: 'Store Finder',
+    title: 'Ita-Obe Packages',
     icon: 'ios-pin',
-    key: 'map'
+    key: 'packages',
   },
   {
     id: 21,
     key: 'contact',
     title: 'Contact Us',
     icon: 'md-phone-portrait',
-    key: 'contact'
   },
   {
-    id: 23,
-    key: 'newsletter',
-    title: 'Newsletter',
-    icon: 'md-paper',
-    key: 'newsletter'
-  }
+    id: 21,
+    key: 'login',
+    title: 'Login',
+    icon: 'ios-person',
+  },
 ];

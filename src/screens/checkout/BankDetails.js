@@ -4,7 +4,7 @@
 
 // React native and others libraries imports
 import React, { Component } from 'react';
-import { ImageBackground, AsyncStorage, StyleSheet, Dimensions } from 'react-native';
+import { ImageBackground, AsyncStorage, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
 import { Container, Content, Text,View, Grid, Col, Left, Right, Button, Icon, Picker, ListItem, Body, Radio, Input, Item } from 'native-base';
 import FAIcon  from 'react-native-vector-icons/FontAwesome';
 import { Actions } from 'react-native-router-flux';
@@ -19,7 +19,9 @@ export default class BankDetails extends Component {
       super(props);
       this.state = {
         payement:{},
-
+        user_id: '',
+        session_id: '',
+        loading: false,
       };
   }
 
@@ -44,10 +46,50 @@ export default class BankDetails extends Component {
    
   }
 
+  bankTransferVerification() {
+    const { user_id, session_id ,payement} = this.state
+   this.setState({ loading: true })
+   const formData = new FormData();
+   formData.append('feature', "order");
+   formData.append('action', "bankVerify");
+   formData.append('id', user_id,);
+   formData.append('sid', session_id);
+
+   fetch('https://www.ita-obe.com/mobile/v1/order.php', {
+       method: 'POST', headers: {
+           Accept: 'application/json',
+       }, body: formData,
+   })
+       .then(res => res.json())
+       .then(res => {
+           console.warn(res);
+           if (!res.error) {
+               this.setState({
+                   loading: false,
+               })
+               Actions.confirmation({paymentDetails: payement});
+
+           } else {
+               Alert.alert('Registration failed', res.message, [{ text: 'Okay' }])
+               this.setState({ loading: false })
+           }
+       }).catch((error) => {
+           console.warn(error);
+           alert(error.message);
+       });
+}
 
 
 
   render() {
+    if (this.state.loading) {
+      return (
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+              <ActivityIndicator />
+              <Text>Processing Order</Text>
+          </View>
+      );
+  }
 
 
     var left = (
@@ -111,9 +153,8 @@ export default class BankDetails extends Component {
   }
 
   checkout() {
-    const {payement, bill} = this.state
-    Actions.confirmation({paymentDetails: payement});
-  }
+    this.bankTransferVerification();
+   }
 
 
 }

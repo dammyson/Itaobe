@@ -1,6 +1,6 @@
 
 import React, {Component} from 'react';
-import {AsyncStorage, StyleSheet, Text, View,Image, Alert, TouchableOpacity} from 'react-native';
+import {AsyncStorage, StyleSheet, Text, View,Image, Alert, ActivityIndicator} from 'react-native';
 import Rave from 'react-native-rave';
 
 export default class Pay extends Component{
@@ -29,7 +29,7 @@ export default class Pay extends Component{
         console.log("error", data);
       }
       onClose(data) {
-        console.log("error", data);
+        console.warn("error", data);
       }
 
 
@@ -44,7 +44,47 @@ export default class Pay extends Component{
           }
        
          }
-
+         raveVerification() {
+          const { user_id, session_id ,payement} = this.state
+         this.setState({ loading: true })
+         const formData = new FormData();
+         formData.append('feature', "order");
+         formData.append('action', "DeliveryVerify");
+         formData.append('id', user_id,);
+         formData.append('sid', session_id);
+      
+         fetch('https://www.ita-obe.com/mobile/v1/order.php', {
+             method: 'POST', headers: {
+                 Accept: 'application/json',
+             }, body: formData,
+         })
+             .then(res => res.json())
+             .then(res => {
+                 console.warn(res);
+                 if (!res.error) {
+                     this.setState({
+                         loading: false,
+                     })
+      
+                     Alert.alert(
+                      'Success',
+                      'Order registered succesfully',
+                      [
+                        {text: 'Cancel', onPress: () => Actions.confirmation({paymentDetails: payement})},
+                        {text: 'OK', onPress: () =>   Actions.confirmation({paymentDetails: payement})},
+                      ],
+                      { cancelable: false }
+                    )
+      
+                 } else {
+                     Alert.alert('Registration failed', res.message, [{ text: 'Okay' }])
+                     this.setState({ loading: false })
+                 }
+             }).catch((error) => {
+                 console.warn(error);
+                 alert(error.message);
+             });
+      }
 
     render() {
         const {email,fname, lname, ammount} = this.state
@@ -52,7 +92,7 @@ export default class Pay extends Component{
     if (email != "" || fname != "" || lname != "" ||  ammount > 0) {
       return (
         <Rave 
-        amount={ammount} 
+        amount='100'
         country="NG" 
         currency="NGN" 
         email="voecmmce"

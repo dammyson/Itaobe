@@ -97,8 +97,14 @@ export default class SignUP extends Component{
             AsyncStorage.setItem("last",  res.id);
             Actions.home()
             }else{
-          Alert.alert('Login failed', "Check your email and password", [{text: 'Okay'}])
-          this.setState({ loading: false})
+              if(res.message =='Please update password'){
+                Actions.changepassword()
+              }else{
+                Alert.alert('Login failed', "Check your email and password", [{text: 'Okay'}])
+                this.setState({ loading: false})
+              }
+             
+              
             }
 
 
@@ -114,7 +120,7 @@ export default class SignUP extends Component{
       return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <ActivityIndicator />
-          <Text>Processing</Text>
+          <Text>Signing in</Text>
         </View>
       );
     }
@@ -161,11 +167,11 @@ export default class SignUP extends Component{
                             secureTextEntry
                             placeholderTextColor= '#000'
                             returnKeyType = "next"
-                            onSubmitEditing = {() => this.passwordInput.focus()}
                             keyboardType = "email-address"
                             autoCapitalize= "none"
                             autoCorrect = {false}
                             style = {styles.input}
+                            ref={(input) => this.passwordInput = input}
                             onChangeText = {text => this.setState({password: text})}
                           />  
                         </View>
@@ -173,7 +179,7 @@ export default class SignUP extends Component{
 
                       <View style={styles.bottomtop}>
                         <TouchableOpacity   style={{marginRight:20}}
-                            onPress ={() =>  this.props.navigation.navigate('SignUp')} >
+                             onPress ={() => Actions.forgot({email: "jesus"})}>
                             <Text style={{fontWeight: 'bold',  marginRight:20,}}>
                               Forgot Password? 
                             </Text>
